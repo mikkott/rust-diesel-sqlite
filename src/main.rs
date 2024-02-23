@@ -25,4 +25,19 @@ fn main() {
         Some(user) => println!("inserted {}", user.email),
         None => println!("user exists, no action"),
     };
+
+    let res = db::controllers::delete_user(
+        conn,
+        User {
+            id: 1,
+            username: "foo".to_string(),
+            email: "bar".to_string(),
+            enabled: false,
+        },
+    );
+
+    match res {
+        Ok(_) => println!("delete test success"),
+        Err(_) => println!("delete test sucks"),
+    }
 }

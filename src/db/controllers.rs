@@ -1,12 +1,13 @@
 use crate::db::models::NewUser;
 use crate::db::models::User;
+use crate::db::schema::users::id;
+use diesel::ExpressionMethods;
+use diesel::QueryDsl;
 use diesel::SqliteConnection;
 
 pub fn exist_user(conn: &mut SqliteConnection, e: &str) -> Option<bool> {
     use crate::db::schema::users::dsl::*;
     use diesel::dsl::exists;
-    use diesel::query_dsl::methods::FilterDsl;
-    use diesel::ExpressionMethods;
     use diesel::RunQueryDsl;
 
     let user_exists: Result<bool, diesel::result::Error> = diesel::select(exists(
@@ -32,4 +33,14 @@ pub fn create_user(conn: &mut SqliteConnection, username: &str, email: &str) -> 
         .returning(User::as_returning())
         .get_result(conn)
         .expect("err")
+}
+
+pub fn delete_user(
+    conn: &mut SqliteConnection,
+    user: User,
+) -> Result<usize, diesel::result::Error> {
+    use crate::db::schema::users::dsl::users;
+    use diesel::RunQueryDsl;
+
+    diesel::delete(users.filter(id.eq(user.id))).execute(conn)
 }
