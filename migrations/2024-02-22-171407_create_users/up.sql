@@ -1,0 +1,7 @@
+-- Your SQL goes here
+CREATE TABLE users (
+	id INTEGER NOT NULL PRIMARY KEY,
+	username TEXT NOT NULL,
+	email TEXT NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT 0
+)
