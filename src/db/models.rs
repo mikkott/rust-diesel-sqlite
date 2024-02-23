@@ -17,3 +17,14 @@ pub struct NewUser<'a> {
     pub username: &'a str,
     pub email: &'a str,
 }
+
+impl User {
+    pub fn new(email: &str, username: &str) -> Self {
+        Self {
+            email: email.to_string(),
+            username: username.to_string(),
+            id: 0,
+            enabled: false,
+        }
+    }
+}

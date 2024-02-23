@@ -13,7 +13,7 @@ fn main() {
     let conn: &mut SqliteConnection = &mut SqliteConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url));
 
-    let user: User = User::new("foo@bar", "foobarri");
+    let user: User = db::models::User::new("foo@bar", "foobarri");
 
     let user: Option<User> = match exist_user(conn, user.email.as_str()) {
         Some(false) => Some(create_user(conn, &user.username, &user.email)),
@@ -52,15 +52,4 @@ pub fn create_user(conn: &mut SqliteConnection, username: &str, email: &str) -> 
         .returning(User::as_returning())
         .get_result(conn)
         .expect("err")
-}
-
-impl User {
-    fn new(email: &str, username: &str) -> Self {
-        Self {
-            email: email.to_string(),
-            username: username.to_string(),
-            id: 0,
-            enabled: false,
-        }
-    }
 }
