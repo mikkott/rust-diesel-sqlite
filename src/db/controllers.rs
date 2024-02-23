@@ -1,7 +1,7 @@
 use crate::db::models::NewUser;
 use crate::db::models::User;
+use crate::db::schema::users::dsl::users;
 use crate::db::schema::users::email;
-
 use diesel::ExpressionMethods;
 use diesel::QueryDsl;
 use diesel::RunQueryDsl;
@@ -39,12 +39,9 @@ pub fn delete_user(
     conn: &mut SqliteConnection,
     user: User,
 ) -> Result<usize, diesel::result::Error> {
-    use crate::db::schema::users::dsl::users;
-
     diesel::delete(users.filter(email.eq(user.email))).execute(conn)
 }
 
 pub fn list_users(conn: &mut SqliteConnection) -> Result<Vec<String>, diesel::result::Error> {
-    use crate::db::schema::users::dsl::users;
     users.select(email).load::<String>(conn)
 }
